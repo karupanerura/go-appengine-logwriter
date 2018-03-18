@@ -18,7 +18,13 @@ func NewWriter(ctx context.Context, l func(ctx context.Context, format string, a
 	return &Writer{ctx: ctx, l: logger(l)}
 }
 
-func (w *Writer) Write(p []byte) (n int, err error) {
-	w.l(w.ctx, string(p))
-	return len(p), nil
+// Write is io.Writer interface.
+func (w *Writer) Write(b []byte) (n int, err error) {
+	return w.WriteString(string(b))
+}
+
+// WriteString is io.WriteString interface.
+func (w *Writer) WriteString(s string) (n int, err error) {
+	w.l(w.ctx, s)
+	return len(s), nil
 }
